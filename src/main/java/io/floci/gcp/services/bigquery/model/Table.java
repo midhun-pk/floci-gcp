@@ -23,6 +23,10 @@ public class Table {
     private String numBytes;
     private String creationTime;
     private String lastModifiedTime;
+    /** {@code ViewDefinition}: {@code query}, {@code useLegacySql}. */
+    private Map<String, Object> view;
+    /** {@code MaterializedViewDefinition}: {@code query}. */
+    private Map<String, Object> materializedView;
 
     public String getKind() { return kind; }
     public void setKind(String kind) { this.kind = kind; }
@@ -65,4 +69,16 @@ public class Table {
 
     public String getLastModifiedTime() { return lastModifiedTime; }
     public void setLastModifiedTime(String lastModifiedTime) { this.lastModifiedTime = lastModifiedTime; }
+
+    public Map<String, Object> getView() { return view; }
+    public void setView(Map<String, Object> view) { this.view = view; }
+
+    public Map<String, Object> getMaterializedView() { return materializedView; }
+    public void setMaterializedView(Map<String, Object> materializedView) { this.materializedView = materializedView; }
+
+    /** The GoogleSQL of a logical or materialized view, or null for other table types. */
+    public String viewQuery() {
+        Map<String, Object> definition = view != null ? view : materializedView;
+        return definition != null && definition.get("query") instanceof String q ? q : null;
+    }
 }
